@@ -1,0 +1,848 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Covid_19_PackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Deliveries">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DriverID" Type="int" Nullable="false" />
+          <Property Name="DeliveryDate" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DeliveryDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeliveryID" Type="int" Nullable="false" />
+          <Property Name="DestinationIsHome" Type="bit" Nullable="false" />
+          <Property Name="DestinationID" Type="int" Nullable="false" />
+          <Property Name="DestinationIndex" Type="int" Nullable="false" />
+          <Property Name="DestinationStart" Type="smalldatetime" Nullable="false" />
+          <Property Name="DestinationEnd" Type="smalldatetime" Nullable="false" />
+          <Property Name="ActualStart" Type="smalldatetime" Nullable="false" />
+          <Property Name="ActualEnd" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DistributionCentre">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DistributionCentre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="AddedByUserID" Type="int" Nullable="false" />
+          <Property Name="AddedDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastDelivery" Type="smalldatetime" Nullable="false" />
+          <Property Name="MasksRequired" Type="int" Nullable="false" />
+          <Property Name="PriorityID" Type="tinyint" Nullable="false" />
+          <Property Name="ApprovedByUserID" Type="int" Nullable="false" />
+          <Property Name="ApprovedByDate" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HomeDelivery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DateInfected" Type="smalldatetime" Nullable="false" />
+          <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="AddedByUserID" Type="int" Nullable="false" />
+          <Property Name="AddedDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastDelivery" Type="smalldatetime" Nullable="false" />
+          <Property Name="MasksRequired" Type="int" Nullable="false" />
+          <Property Name="PriorityID" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoginRoles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoginUserRoles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoginUsers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoginID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginPassword" Type="varbinary(max)" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastLogin" Type="datetime" Nullable="false" />
+          <Property Name="LoginFail" Type="tinyint" Nullable="false" />
+          <Property Name="AccountIsLocked" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PackingCentres">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PackingName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="PackingCapacityPerHour" Type="int" Nullable="false" />
+          <Property Name="LeadID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PackingDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CentreID" Type="int" Nullable="false" />
+          <Property Name="PackingDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="PackingQuantity" Type="int" Nullable="false" />
+          <Property Name="AckbyLeadID" Type="bit" />
+          <Property Name="ReadyForCollection" Type="bit" Nullable="false" />
+          <Property Name="OutForDelivery" Type="bit" Nullable="false" />
+          <Property Name="DeliveryID" Type="int" />
+        </EntityType>
+        <EntityType Name="StatusPriority">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="tinyint" Nullable="false" />
+          <Property Name="Priority" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Deliveries_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DeliveryDetails_Deliveries">
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="1" />
+          <End Role="DeliveryDetails" Type="Self.DeliveryDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DeliveryDetails">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributionCentreDelivery_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="DistributionCentre" Type="Self.DistributionCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DistributionCentre">
+              <PropertyRef Name="AddedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributionCentreDelivery_LoginUsers1">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="DistributionCentre" Type="Self.DistributionCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DistributionCentre">
+              <PropertyRef Name="ApprovedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributionCentreDelivery_StatusPriority">
+          <End Role="StatusPriority" Type="Self.StatusPriority" Multiplicity="1" />
+          <End Role="DistributionCentre" Type="Self.DistributionCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusPriority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DistributionCentre">
+              <PropertyRef Name="PriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeDelivery_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="HomeDelivery" Type="Self.HomeDelivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeDelivery">
+              <PropertyRef Name="AddedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeDelivery_LoginUsers1">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="HomeDelivery" Type="Self.HomeDelivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeDelivery">
+              <PropertyRef Name="AddedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeDelivery_StatusPriority">
+          <End Role="StatusPriority" Type="Self.StatusPriority" Multiplicity="1" />
+          <End Role="HomeDelivery" Type="Self.HomeDelivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusPriority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeDelivery">
+              <PropertyRef Name="PriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginUserRoles_LoginRoles">
+          <End Role="LoginRoles" Type="Self.LoginRoles" Multiplicity="1" />
+          <End Role="LoginUserRoles" Type="Self.LoginUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginRoles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LoginUserRoles">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginUserRoles_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="LoginUserRoles" Type="Self.LoginUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LoginUserRoles">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingCentres_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUsers" Multiplicity="1" />
+          <End Role="PackingCentres" Type="Self.PackingCentres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackingCentres">
+              <PropertyRef Name="LeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingDetails_Deliveries">
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="0..1" />
+          <End Role="PackingDetails" Type="Self.PackingDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackingDetails">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingDetails_PackingCentres">
+          <End Role="PackingCentres" Type="Self.PackingCentres" Multiplicity="1" />
+          <End Role="PackingDetails" Type="Self.PackingDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PackingCentres">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackingDetails">
+              <PropertyRef Name="CentreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Covid_19_PackingModelStoreContainer">
+          <EntitySet Name="Deliveries" EntityType="Self.Deliveries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeliveryDetails" EntityType="Self.DeliveryDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DistributionCentre" EntityType="Self.DistributionCentre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HomeDelivery" EntityType="Self.HomeDelivery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginRoles" EntityType="Self.LoginRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginUserRoles" EntityType="Self.LoginUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginUsers" EntityType="Self.LoginUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PackingCentres" EntityType="Self.PackingCentres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PackingDetails" EntityType="Self.PackingDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatusPriority" EntityType="Self.StatusPriority" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Deliveries_LoginUsers" Association="Self.FK_Deliveries_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DeliveryDetails_Deliveries" Association="Self.FK_DeliveryDetails_Deliveries">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="DeliveryDetails" EntitySet="DeliveryDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributionCentreDelivery_LoginUsers" Association="Self.FK_DistributionCentreDelivery_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="DistributionCentre" EntitySet="DistributionCentre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributionCentreDelivery_LoginUsers1" Association="Self.FK_DistributionCentreDelivery_LoginUsers1">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="DistributionCentre" EntitySet="DistributionCentre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributionCentreDelivery_StatusPriority" Association="Self.FK_DistributionCentreDelivery_StatusPriority">
+            <End Role="StatusPriority" EntitySet="StatusPriority" />
+            <End Role="DistributionCentre" EntitySet="DistributionCentre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeDelivery_LoginUsers" Association="Self.FK_HomeDelivery_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="HomeDelivery" EntitySet="HomeDelivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeDelivery_LoginUsers1" Association="Self.FK_HomeDelivery_LoginUsers1">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="HomeDelivery" EntitySet="HomeDelivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeDelivery_StatusPriority" Association="Self.FK_HomeDelivery_StatusPriority">
+            <End Role="StatusPriority" EntitySet="StatusPriority" />
+            <End Role="HomeDelivery" EntitySet="HomeDelivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginUserRoles_LoginRoles" Association="Self.FK_LoginUserRoles_LoginRoles">
+            <End Role="LoginRoles" EntitySet="LoginRoles" />
+            <End Role="LoginUserRoles" EntitySet="LoginUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginUserRoles_LoginUsers" Association="Self.FK_LoginUserRoles_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="LoginUserRoles" EntitySet="LoginUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingCentres_LoginUsers" Association="Self.FK_PackingCentres_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="PackingCentres" EntitySet="PackingCentres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingDetails_Deliveries" Association="Self.FK_PackingDetails_Deliveries">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="PackingDetails" EntitySet="PackingDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingDetails_PackingCentres" Association="Self.FK_PackingDetails_PackingCentres">
+            <End Role="PackingCentres" EntitySet="PackingCentres" />
+            <End Role="PackingDetails" EntitySet="PackingDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Covid_19_PackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Delivery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DriverID" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="LoginUser" Relationship="Self.FK_Deliveries_LoginUsers" FromRole="Deliveries" ToRole="LoginUsers" />
+          <NavigationProperty Name="DeliveryDetails" Relationship="Self.FK_DeliveryDetails_Deliveries" FromRole="Deliveries" ToRole="DeliveryDetails" />
+          <NavigationProperty Name="PackingDetails" Relationship="Self.FK_PackingDetails_Deliveries" FromRole="Deliveries" ToRole="PackingDetails" />
+        </EntityType>
+        <EntityType Name="DeliveryDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeliveryID" Type="Int32" Nullable="false" />
+          <Property Name="DestinationIsHome" Type="Boolean" Nullable="false" />
+          <Property Name="DestinationID" Type="Int32" Nullable="false" />
+          <Property Name="DestinationIndex" Type="Int32" Nullable="false" />
+          <Property Name="DestinationStart" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DestinationEnd" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ActualStart" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ActualEnd" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Delivery" Relationship="Self.FK_DeliveryDetails_Deliveries" FromRole="DeliveryDetails" ToRole="Deliveries" />
+        </EntityType>
+        <EntityType Name="DistributionCentre">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DistributionCentre1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AddedByUserID" Type="Int32" Nullable="false" />
+          <Property Name="AddedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LastDelivery" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MasksRequired" Type="Int32" Nullable="false" />
+          <Property Name="PriorityID" Type="Byte" Nullable="false" />
+          <Property Name="ApprovedByUserID" Type="Int32" Nullable="false" />
+          <Property Name="ApprovedByDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="LoginUser" Relationship="Self.FK_DistributionCentreDelivery_LoginUsers" FromRole="DistributionCentre" ToRole="LoginUsers" />
+          <NavigationProperty Name="LoginUser1" Relationship="Self.FK_DistributionCentreDelivery_LoginUsers1" FromRole="DistributionCentre" ToRole="LoginUsers" />
+          <NavigationProperty Name="StatusPriority" Relationship="Self.FK_DistributionCentreDelivery_StatusPriority" FromRole="DistributionCentre" ToRole="StatusPriority" />
+        </EntityType>
+        <EntityType Name="HomeDelivery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateInfected" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AddedByUserID" Type="Int32" Nullable="false" />
+          <Property Name="AddedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LastDelivery" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MasksRequired" Type="Int32" Nullable="false" />
+          <Property Name="PriorityID" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="LoginUser" Relationship="Self.FK_HomeDelivery_LoginUsers" FromRole="HomeDelivery" ToRole="LoginUsers" />
+          <NavigationProperty Name="LoginUser1" Relationship="Self.FK_HomeDelivery_LoginUsers1" FromRole="HomeDelivery" ToRole="LoginUsers" />
+          <NavigationProperty Name="StatusPriority" Relationship="Self.FK_HomeDelivery_StatusPriority" FromRole="HomeDelivery" ToRole="StatusPriority" />
+        </EntityType>
+        <EntityType Name="LoginRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="LoginUserRoles" Relationship="Self.FK_LoginUserRoles_LoginRoles" FromRole="LoginRoles" ToRole="LoginUserRoles" />
+        </EntityType>
+        <EntityType Name="LoginUserRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LoginRole" Relationship="Self.FK_LoginUserRoles_LoginRoles" FromRole="LoginUserRoles" ToRole="LoginRoles" />
+          <NavigationProperty Name="LoginUser" Relationship="Self.FK_LoginUserRoles_LoginUsers" FromRole="LoginUserRoles" ToRole="LoginUsers" />
+        </EntityType>
+        <EntityType Name="LoginUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoginPassword" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastLogin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LoginFail" Type="Byte" Nullable="false" />
+          <Property Name="AccountIsLocked" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Deliveries" Relationship="Self.FK_Deliveries_LoginUsers" FromRole="LoginUsers" ToRole="Deliveries" />
+          <NavigationProperty Name="DistributionCentres" Relationship="Self.FK_DistributionCentreDelivery_LoginUsers" FromRole="LoginUsers" ToRole="DistributionCentre" />
+          <NavigationProperty Name="DistributionCentres1" Relationship="Self.FK_DistributionCentreDelivery_LoginUsers1" FromRole="LoginUsers" ToRole="DistributionCentre" />
+          <NavigationProperty Name="HomeDeliveries" Relationship="Self.FK_HomeDelivery_LoginUsers" FromRole="LoginUsers" ToRole="HomeDelivery" />
+          <NavigationProperty Name="HomeDeliveries1" Relationship="Self.FK_HomeDelivery_LoginUsers1" FromRole="LoginUsers" ToRole="HomeDelivery" />
+          <NavigationProperty Name="LoginUserRoles" Relationship="Self.FK_LoginUserRoles_LoginUsers" FromRole="LoginUsers" ToRole="LoginUserRoles" />
+          <NavigationProperty Name="PackingCentres" Relationship="Self.FK_PackingCentres_LoginUsers" FromRole="LoginUsers" ToRole="PackingCentres" />
+        </EntityType>
+        <EntityType Name="PackingCentre">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PackingName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PackingCapacityPerHour" Type="Int32" Nullable="false" />
+          <Property Name="LeadID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LoginUser" Relationship="Self.FK_PackingCentres_LoginUsers" FromRole="PackingCentres" ToRole="LoginUsers" />
+          <NavigationProperty Name="PackingDetails" Relationship="Self.FK_PackingDetails_PackingCentres" FromRole="PackingCentres" ToRole="PackingDetails" />
+        </EntityType>
+        <EntityType Name="PackingDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CentreID" Type="Int32" Nullable="false" />
+          <Property Name="PackingDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PackingQuantity" Type="Int32" Nullable="false" />
+          <Property Name="AckbyLeadID" Type="Boolean" />
+          <Property Name="ReadyForCollection" Type="Boolean" Nullable="false" />
+          <Property Name="OutForDelivery" Type="Boolean" Nullable="false" />
+          <Property Name="DeliveryID" Type="Int32" />
+          <NavigationProperty Name="Delivery" Relationship="Self.FK_PackingDetails_Deliveries" FromRole="PackingDetails" ToRole="Deliveries" />
+          <NavigationProperty Name="PackingCentre" Relationship="Self.FK_PackingDetails_PackingCentres" FromRole="PackingDetails" ToRole="PackingCentres" />
+        </EntityType>
+        <EntityType Name="StatusPriority">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Byte" Nullable="false" />
+          <Property Name="Priority" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DistributionCentres" Relationship="Self.FK_DistributionCentreDelivery_StatusPriority" FromRole="StatusPriority" ToRole="DistributionCentre" />
+          <NavigationProperty Name="HomeDeliveries" Relationship="Self.FK_HomeDelivery_StatusPriority" FromRole="StatusPriority" ToRole="HomeDelivery" />
+        </EntityType>
+        <Association Name="FK_Deliveries_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DeliveryDetails_Deliveries">
+          <End Role="Deliveries" Type="Self.Delivery" Multiplicity="1" />
+          <End Role="DeliveryDetails" Type="Self.DeliveryDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DeliveryDetails">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingDetails_Deliveries">
+          <End Role="Deliveries" Type="Self.Delivery" Multiplicity="0..1" />
+          <End Role="PackingDetails" Type="Self.PackingDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackingDetails">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributionCentreDelivery_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="DistributionCentre" Type="Self.DistributionCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DistributionCentre">
+              <PropertyRef Name="AddedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributionCentreDelivery_LoginUsers1">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="DistributionCentre" Type="Self.DistributionCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DistributionCentre">
+              <PropertyRef Name="ApprovedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DistributionCentreDelivery_StatusPriority">
+          <End Role="StatusPriority" Type="Self.StatusPriority" Multiplicity="1" />
+          <End Role="DistributionCentre" Type="Self.DistributionCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusPriority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DistributionCentre">
+              <PropertyRef Name="PriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeDelivery_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="HomeDelivery" Type="Self.HomeDelivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeDelivery">
+              <PropertyRef Name="AddedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeDelivery_LoginUsers1">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="HomeDelivery" Type="Self.HomeDelivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeDelivery">
+              <PropertyRef Name="AddedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeDelivery_StatusPriority">
+          <End Role="StatusPriority" Type="Self.StatusPriority" Multiplicity="1" />
+          <End Role="HomeDelivery" Type="Self.HomeDelivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusPriority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeDelivery">
+              <PropertyRef Name="PriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginUserRoles_LoginRoles">
+          <End Role="LoginRoles" Type="Self.LoginRole" Multiplicity="1" />
+          <End Role="LoginUserRoles" Type="Self.LoginUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginRoles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LoginUserRoles">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginUserRoles_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="LoginUserRoles" Type="Self.LoginUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LoginUserRoles">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingCentres_LoginUsers">
+          <End Role="LoginUsers" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="PackingCentres" Type="Self.PackingCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackingCentres">
+              <PropertyRef Name="LeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackingDetails_PackingCentres">
+          <End Role="PackingCentres" Type="Self.PackingCentre" Multiplicity="1" />
+          <End Role="PackingDetails" Type="Self.PackingDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PackingCentres">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackingDetails">
+              <PropertyRef Name="CentreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Covid_19_PackingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Deliveries" EntityType="Self.Delivery" />
+          <EntitySet Name="DeliveryDetails" EntityType="Self.DeliveryDetail" />
+          <EntitySet Name="DistributionCentres" EntityType="Self.DistributionCentre" />
+          <EntitySet Name="HomeDeliveries" EntityType="Self.HomeDelivery" />
+          <EntitySet Name="LoginRoles" EntityType="Self.LoginRole" />
+          <EntitySet Name="LoginUserRoles" EntityType="Self.LoginUserRole" />
+          <EntitySet Name="LoginUsers" EntityType="Self.LoginUser" />
+          <EntitySet Name="PackingCentres" EntityType="Self.PackingCentre" />
+          <EntitySet Name="PackingDetails" EntityType="Self.PackingDetail" />
+          <EntitySet Name="StatusPriorities" EntityType="Self.StatusPriority" />
+          <AssociationSet Name="FK_Deliveries_LoginUsers" Association="Self.FK_Deliveries_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DeliveryDetails_Deliveries" Association="Self.FK_DeliveryDetails_Deliveries">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="DeliveryDetails" EntitySet="DeliveryDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingDetails_Deliveries" Association="Self.FK_PackingDetails_Deliveries">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="PackingDetails" EntitySet="PackingDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributionCentreDelivery_LoginUsers" Association="Self.FK_DistributionCentreDelivery_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="DistributionCentre" EntitySet="DistributionCentres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributionCentreDelivery_LoginUsers1" Association="Self.FK_DistributionCentreDelivery_LoginUsers1">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="DistributionCentre" EntitySet="DistributionCentres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DistributionCentreDelivery_StatusPriority" Association="Self.FK_DistributionCentreDelivery_StatusPriority">
+            <End Role="StatusPriority" EntitySet="StatusPriorities" />
+            <End Role="DistributionCentre" EntitySet="DistributionCentres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeDelivery_LoginUsers" Association="Self.FK_HomeDelivery_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="HomeDelivery" EntitySet="HomeDeliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeDelivery_LoginUsers1" Association="Self.FK_HomeDelivery_LoginUsers1">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="HomeDelivery" EntitySet="HomeDeliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeDelivery_StatusPriority" Association="Self.FK_HomeDelivery_StatusPriority">
+            <End Role="StatusPriority" EntitySet="StatusPriorities" />
+            <End Role="HomeDelivery" EntitySet="HomeDeliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginUserRoles_LoginRoles" Association="Self.FK_LoginUserRoles_LoginRoles">
+            <End Role="LoginRoles" EntitySet="LoginRoles" />
+            <End Role="LoginUserRoles" EntitySet="LoginUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginUserRoles_LoginUsers" Association="Self.FK_LoginUserRoles_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="LoginUserRoles" EntitySet="LoginUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingCentres_LoginUsers" Association="Self.FK_PackingCentres_LoginUsers">
+            <End Role="LoginUsers" EntitySet="LoginUsers" />
+            <End Role="PackingCentres" EntitySet="PackingCentres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackingDetails_PackingCentres" Association="Self.FK_PackingDetails_PackingCentres">
+            <End Role="PackingCentres" EntitySet="PackingCentres" />
+            <End Role="PackingDetails" EntitySet="PackingDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Covid_19_PackingModelStoreContainer" CdmEntityContainer="Covid_19_PackingEntities">
+          <EntitySetMapping Name="Deliveries">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.Delivery">
+              <MappingFragment StoreEntitySet="Deliveries">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeliveryDetails">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.DeliveryDetail">
+              <MappingFragment StoreEntitySet="DeliveryDetails">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="DestinationIsHome" ColumnName="DestinationIsHome" />
+                <ScalarProperty Name="DestinationID" ColumnName="DestinationID" />
+                <ScalarProperty Name="DestinationIndex" ColumnName="DestinationIndex" />
+                <ScalarProperty Name="DestinationStart" ColumnName="DestinationStart" />
+                <ScalarProperty Name="DestinationEnd" ColumnName="DestinationEnd" />
+                <ScalarProperty Name="ActualStart" ColumnName="ActualStart" />
+                <ScalarProperty Name="ActualEnd" ColumnName="ActualEnd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DistributionCentres">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.DistributionCentre">
+              <MappingFragment StoreEntitySet="DistributionCentre">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DistributionCentre1" ColumnName="DistributionCentre" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="AddedByUserID" ColumnName="AddedByUserID" />
+                <ScalarProperty Name="AddedDate" ColumnName="AddedDate" />
+                <ScalarProperty Name="LastDelivery" ColumnName="LastDelivery" />
+                <ScalarProperty Name="MasksRequired" ColumnName="MasksRequired" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+                <ScalarProperty Name="ApprovedByUserID" ColumnName="ApprovedByUserID" />
+                <ScalarProperty Name="ApprovedByDate" ColumnName="ApprovedByDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HomeDeliveries">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.HomeDelivery">
+              <MappingFragment StoreEntitySet="HomeDelivery">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="DateInfected" ColumnName="DateInfected" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="AddedByUserID" ColumnName="AddedByUserID" />
+                <ScalarProperty Name="AddedDate" ColumnName="AddedDate" />
+                <ScalarProperty Name="LastDelivery" ColumnName="LastDelivery" />
+                <ScalarProperty Name="MasksRequired" ColumnName="MasksRequired" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginRoles">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.LoginRole">
+              <MappingFragment StoreEntitySet="LoginRoles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginUserRoles">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.LoginUserRole">
+              <MappingFragment StoreEntitySet="LoginUserRoles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginUsers">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.LoginUser">
+              <MappingFragment StoreEntitySet="LoginUsers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+                <ScalarProperty Name="LoginPassword" ColumnName="LoginPassword" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="LoginFail" ColumnName="LoginFail" />
+                <ScalarProperty Name="AccountIsLocked" ColumnName="AccountIsLocked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PackingCentres">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.PackingCentre">
+              <MappingFragment StoreEntitySet="PackingCentres">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PackingName" ColumnName="PackingName" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="PackingCapacityPerHour" ColumnName="PackingCapacityPerHour" />
+                <ScalarProperty Name="LeadID" ColumnName="LeadID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PackingDetails">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.PackingDetail">
+              <MappingFragment StoreEntitySet="PackingDetails">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CentreID" ColumnName="CentreID" />
+                <ScalarProperty Name="PackingDate" ColumnName="PackingDate" />
+                <ScalarProperty Name="PackingQuantity" ColumnName="PackingQuantity" />
+                <ScalarProperty Name="AckbyLeadID" ColumnName="AckbyLeadID" />
+                <ScalarProperty Name="ReadyForCollection" ColumnName="ReadyForCollection" />
+                <ScalarProperty Name="OutForDelivery" ColumnName="OutForDelivery" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatusPriorities">
+            <EntityTypeMapping TypeName="Covid_19_PackingModel.StatusPriority">
+              <MappingFragment StoreEntitySet="StatusPriority">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
