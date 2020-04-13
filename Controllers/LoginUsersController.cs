@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using COVID19_Part2_WebApi;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace COVID19_Part2_WebApi.Controllers
 {
@@ -43,21 +44,25 @@ namespace COVID19_Part2_WebApi.Controllers
             return Json("Password incorrect! Application will now close!");
         }
 
-        // POST: LoginUsers/Details/5
-        [HttpPost]
-        public ActionResult Details(int? id)
+        public ActionResult Login(byte[] username, byte[] password)
         {
-            if (id == null)
+            using (var rsa = new RSACryptoServiceProvider(2048))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                rsa.PersistKeyInCsp = false;
+                rsa.ImportParameters(privateKey);
+                var decryptedUsername = Encoding.UTF8.GetString(rsa.Decrypt(username, true));
+                var decrytedPassword = rsa.Decrypt(password, true);
+                var getUser = (from x in db.LoginUsers
+                               where x.LoginID == decryptedUsername && x.LoginPassword == decrytedPassword
+                               select x).FirstOrDefault();
+                if (getUser != null)
+                {
+                    return Json(getUser);
+                }
+                return Json("User not found or credentials are incorrect!");
             }
-            LoginUser loginUser = db.LoginUsers.Find(id);
-            if (loginUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(loginUser);
         }
+
 
         // POST: LoginUsers/Create
         [HttpPost]
