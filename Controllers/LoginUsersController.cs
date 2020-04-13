@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using COVID19_Part2_WebApi;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace COVID19_Part2_WebApi.Controllers
 {
@@ -19,10 +20,6 @@ namespace COVID19_Part2_WebApi.Controllers
         private static RSAParameters publicKey;
         private static RSAParameters privateKey;
 
-        public LoginUsersController()
-        {
-            GenerateKeys();
-        }
 
         private void GenerateKeys()
         {
@@ -39,19 +36,22 @@ namespace COVID19_Part2_WebApi.Controllers
         {
             if (password == "password")
             {
+                GenerateKeys();
                 return Json(publicKey);
             }
             return Json("Password incorrect! Application will now close!");
         }
 
-        public ActionResult Login(byte[] username, byte[] password)
+        // POST: LoginUsers/Login?username={enterUsername}&password={enterPassword}
+        [HttpPost]
+        public ActionResult Login([Bind(Include = "encrytedUsername,encrytedPassword")] LoginDetails loginUser)
         {
             using (var rsa = new RSACryptoServiceProvider(2048))
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(privateKey);
-                var decryptedUsername = Encoding.UTF8.GetString(rsa.Decrypt(username, true));
-                var decrytedPassword = rsa.Decrypt(password, true);
+                var decryptedUsername = Convert.ToBase64String(rsa.Decrypt(loginUser.encrytedUsername, true));
+                var decrytedPassword = rsa.Decrypt(loginUser.encrytedPassword, true);
                 var getUser = (from x in db.LoginUsers
                                where x.LoginID == decryptedUsername && x.LoginPassword == decrytedPassword
                                select x).FirstOrDefault();
@@ -110,5 +110,12 @@ namespace COVID19_Part2_WebApi.Controllers
             }
             base.Dispose(disposing);
         }
+        public class LoginDetails
+        {
+            public byte[] encrytedUsername { get; set; }
+            public byte[] encrytedPassword { get; set; }
+        }
     }
+
+    
 }
